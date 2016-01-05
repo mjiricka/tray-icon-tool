@@ -19,20 +19,17 @@ void run_client(char *socket_path, char *title)
       exit(EXIT_FAILURE);
    }
 
-   // Start sending.
- 
+   // Prepare structure to send.
    struct tray_icon_data buf;
+   init_tray_icon_data(&buf, title);
 
-   init_tray_icon_data(&buf, "");
-
-   ssize_t rc=read(STDIN_FILENO, buf.msg, sizeof(buf.msg));
-   if (write(soc, &buf, sizeof(buf)) != sizeof(buf)) {
-      if (rc > 0) fprintf(stderr,"partial write");
-      else {
-        perror("write error");
-        exit(EXIT_FAILURE);
-      }
-   }
-
+   // Send it.
+   ssize_t ret = write(soc, &buf, sizeof(buf));
    close(soc);
+
+   // Check result.
+   if (ret != sizeof(buf)) {
+      perror("Write error");
+      exit(EXIT_FAILURE);
+   }
 }

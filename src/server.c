@@ -42,18 +42,16 @@ void run_server(char *socket_path, char *title)
          continue;
       }
 
-      ssize_t rc;
-      // Read incoming message.
-      while (0 < (rc=read(cli,&buf,sizeof(buf)))) {
+      // Read incoming structure.
+      ssize_t rc = read(cli,&buf,sizeof(buf));
+      close(cli);
+
+      // Check result.
+      if (rc == sizeof(buf)) {
          printf("read %u bytes: %.*s %f\n", rc, rc, buf.msg, buf.r);
-      }
-      if (rc == -1) {
-         perror("read");
+      } else {
+         perror("Bad read");
          exit(EXIT_FAILURE);
-      }
-      else if (rc == 0) {
-         printf("EOF\n");
-         close(cli);
       }
    }
 }
