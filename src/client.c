@@ -21,16 +21,16 @@ void run_client(char *socket_path, char *title)
 
    // Start sending.
  
-   ssize_t rc;
-   char buf[BUFFER_SIZE];
+   struct tray_icon_data buf;
 
-   while (0 < (rc=read(STDIN_FILENO, buf, sizeof(buf)))) {
-      if (write(soc, buf, rc) != rc) {
-         if (rc > 0) fprintf(stderr,"partial write");
-         else {
-           perror("write error");
-           exit(EXIT_FAILURE);
-         }
+   init_tray_icon_data(&buf, "");
+
+   ssize_t rc=read(STDIN_FILENO, buf.msg, sizeof(buf.msg));
+   if (write(soc, &buf, sizeof(buf)) != sizeof(buf)) {
+      if (rc > 0) fprintf(stderr,"partial write");
+      else {
+        perror("write error");
+        exit(EXIT_FAILURE);
       }
    }
 

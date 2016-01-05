@@ -32,9 +32,8 @@ void run_server(char *socket_path, char *title)
 
    // Start reading.
 
-   ssize_t rc;
    int cli;
-   char buf[BUFFER_SIZE];
+   struct tray_icon_data buf;
 
    while (1) {
       // Accept connection, do not care about client's socket struct.
@@ -43,9 +42,10 @@ void run_server(char *socket_path, char *title)
          continue;
       }
 
+      ssize_t rc;
       // Read incoming message.
-      while (0 < (rc=read(cli,buf,sizeof(buf)))) {
-         printf("read %u bytes: %.*s\n", rc, rc, buf);
+      while (0 < (rc=read(cli,&buf,sizeof(buf)))) {
+         printf("read %u bytes: %.*s %f\n", rc, rc, buf.msg, buf.r);
       }
       if (rc == -1) {
          perror("read");

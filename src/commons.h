@@ -1,8 +1,6 @@
 #ifndef COMMONS_H
 #define COMMONS_H
 
-#define BUFFER_SIZE 100
-
 struct tray_icon_data {
    char msg[8]; // 8 characters must be enough for anyone!
    float r, g, b;
