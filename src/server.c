@@ -3,11 +3,53 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <gtk/gtk.h>
 
 #include "commons.h"
+#include "gui.h"
+
+
+typedef void (*callback_t)(struct tray_icon_data *tid);
+
+void socket_listen(char *socket_path, char *title, callback_t c);
+
+void socket_listen_lambda(gpointer data);
+
+
+void update_trace_icon (struct tray_icon_data *tid)
+{
+   gui_set(tid->msg);
+}
+
+char *socket_path_global;
+char *title_global;
+callback_t c_global;
+
+void socket_listen_lambda(gpointer data)
+{
+   socket_listen(socket_path_global, title_global, c_global);
+}
 
 
 void run_server(char *socket_path, char *title)
+{
+   // I hope this will be OK.
+
+   // First gui: to be ready to accept update.
+   gui_init();
+
+   // Start listening.
+   //socket_listen(socket_path, title, update_trace_icon);
+   socket_path_global = socket_path;
+   title_global = title;
+   c_global = update_trace_icon;
+   g_thread_new ("dummy", (GThreadFunc)socket_listen_lambda, NULL);
+
+   gui_start();
+}
+
+
+void socket_listen(char *socket_path, char *title, callback_t c)
 {
    int soc;
    struct sockaddr_un addr;
@@ -35,6 +77,9 @@ void run_server(char *socket_path, char *title)
    int cli;
    struct tray_icon_data buf;
 
+   // TODO: debug
+   printf("posloucham..\n");
+
    while (1) {
       // Accept connection, do not care about client's socket struct.
       if ((cli = accept(soc, NULL, NULL)) == -1) {
@@ -49,6 +94,7 @@ void run_server(char *socket_path, char *title)
       // Check result.
       if (rc == sizeof(buf)) {
          printf("read %u bytes: %.*s %f\n", rc, rc, buf.msg, buf.r);
+         c(&buf);
       } else {
          perror("Bad read");
          exit(EXIT_FAILURE);
