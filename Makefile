@@ -5,7 +5,8 @@ SOURCES := \
    server.c \
    client.c \
    commons.c \
-   gui.c
+   gui.c \
+   utils.c
 
 OUTPUT_DIR := bin
 SOURCES_ROOT := src/

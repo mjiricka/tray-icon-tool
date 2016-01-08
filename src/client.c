@@ -6,6 +6,8 @@
 
 #include "commons.h"
 
+// TODO: delete when client_run gets whole struct.
+#include "utils.h"
 
 
 // ******************************************************************
@@ -26,7 +28,8 @@ void client_run(char *socket_path, char *title)
 
    // Prepare structure to send.
    struct tray_icon_data buf;
-   init_tray_icon_data(&buf, title);
+   struct rgb_color c;
+   init_tray_icon_data(&buf, title, &c);
 
    // Send it.
    ssize_t ret = write(soc, &buf, sizeof(buf));

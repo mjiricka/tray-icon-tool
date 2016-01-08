@@ -11,14 +11,13 @@
 //  PUBLIC FUNCTIONS IMPLEMENTATION
 // ******************************************************************
 
-void init_tray_icon_data(struct tray_icon_data *tid, char *msg)
+void init_tray_icon_data(
+   struct tray_icon_data *tid, char *msg, struct rgb_color *color)
 {
    strncpy(tid->msg, msg, 7);
    tid->msg[7] = '\0';
 
-   tid->r = 1.0;
-   tid->g = 1.0;
-   tid->b = 1.0;
+   tid->color.r = color->r;
 }
 
 

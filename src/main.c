@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "utils.h"
 #include "client.h"
 #include "server.h"
 
@@ -17,7 +18,8 @@
 
 int main (int argc, char **argv)
 {
-   if (argc != 4) {
+   // TODO: define upper bound.
+   if (argc < 4) {
       fprintf(stderr, "Bad param.\n");
 	  return EXIT_FAILURE;
    }
@@ -25,6 +27,17 @@ int main (int argc, char **argv)
    char *action_name = argv[1];
    char *socket_path = argv[2];
    char *title = argv[3];
+   struct rgb_color color;
+
+   if (5 <= argc) {
+      if (parse_color(argv[4], &color)) {
+         fprintf(stderr, "Bad color format (e.g. FF0099).\n");
+         return EXIT_FAILURE;
+      }
+   } else {
+      // White is default.
+      parse_color("FFFFFF", &color);
+   }
 
    if (strcmp(argv[1], "client") == 0) {
       printf("Starting client...\n");

@@ -70,7 +70,7 @@ static void socket_listen(char *socket_path, char *title, callback_t c)
 
       // Check result.
       if (rc == sizeof(buf)) {
-         printf("read %u bytes: %.*s %f\n", rc, rc, buf.msg, buf.r);
+         printf("read %u bytes: %.*s %f\n", rc, rc, buf.msg, buf.color.r);
          c(&buf);
       } else {
          perror("Bad read");
