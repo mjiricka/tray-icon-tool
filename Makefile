@@ -1,22 +1,36 @@
-.DEFAULT_GOAL := all
-OBJ := main.o server.o client.o commons.o gui.o
-BINOBJ := $(addprefix bin/, $(OBJ))
+
+
+SOURCES := \
+   main.c \
+   server.c \
+   client.c \
+   commons.c \
+   gui.c
+
+OUTPUT_DIR := bin
+SOURCES_ROOT := src/
+
+OBJECTS := $(addsuffix .o, $(basename $(SOURCES)))
+OBJECTS := $(addprefix $(SOURCES_ROOT), $(OBJECTS))
+
 PARAMS := `pkg-config --cflags --libs gtk+-3.0` -Wno-deprecated-declarations
 
+.DEFAULT_GOAL := all
 .PHONY: all clean
 
 
-bin:
-	mkdir bin
+${OUTPUT_DIR}:
+	mkdir ${OUTPUT_DIR}
 
-bin/%.o: src/%.c
+${OUTPUT_DIR}/util: ${OBJECTS}
+	gcc ${OBJECTS} -o ${OUTPUT_DIR}/util ${PARAMS}
+
+%.o: %.c
 	gcc -c -o $@ $< ${PARAMS}
 
-bin/util: ${BINOBJ}
-	cd bin ; gcc ${OBJ} -o util ${PARAMS}
-
 clean:
-	rm -rf bin
+	rm -rf ${OUTPUT_DIR}
+	find ${SOURCES_ROOT} -name '*.o' -exec rm -f \{\} \;
 
-all: bin bin/util
+all: ${OUTPUT_DIR} ${OUTPUT_DIR}/util
 
