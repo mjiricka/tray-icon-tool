@@ -6,9 +6,10 @@
  */
 
 
-void gui_init();
+typedef void (*gui_start_callback_t)(void);
 
-void gui_start();
+
+void gui_start(gui_start_callback_t callback);
 
 void gui_set(char *str);
 

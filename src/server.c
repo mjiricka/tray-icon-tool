@@ -90,6 +90,13 @@ static void socket_listen_lambda(gpointer data)
 }
 
 
+static void start_socket()
+{
+   // Start listening in new thread, because current thread
+   // is used by GTK.
+   g_thread_new("dummy", (GThreadFunc)socket_listen_lambda, NULL);
+}
+
 
 // ******************************************************************
 //  PUBLIC FUNCTIONS IMPLEMENTATION
@@ -97,20 +104,10 @@ static void socket_listen_lambda(gpointer data)
 
 void server_run(char *socket_path, char *title)
 {
-   // TODO: revisit.
-
-   // I hope this will be OK.
-
-   // First gui: to be ready to accept update.
-   gui_init();
-
-   // Start listening.
-   //socket_listen(socket_path, title, update_trace_icon);
    socket_path_global = socket_path;
    title_global = title;
    c_global = update_trace_icon;
-   g_thread_new("dummy", (GThreadFunc)socket_listen_lambda, NULL);
 
-   gui_start();
+   gui_start(start_socket);
 }
 

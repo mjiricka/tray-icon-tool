@@ -10,8 +10,6 @@
 #define PADDING 1.0
 
 
-static GtkApplication *app;
-
 // In initialized in "active" function.
 static GtkStatusIcon *tray_icon;
 
@@ -94,7 +92,7 @@ static void updateTray(gpointer user_data)
 }
 
 
-static void activate(GtkApplication* app, gpointer user_data)
+static void activate(GtkApplication* app, gpointer gui_started)
 {
    // TODO: zkouknout jeste
 
@@ -114,6 +112,9 @@ static void activate(GtkApplication* app, gpointer user_data)
    gtk_status_icon_set_visible(tray_icon, TRUE);
 
    //gtk_widget_show_all (window);
+
+   // Notify that thread is activated.
+   ((gui_start_callback_t) gui_started)();
 }
 
 
@@ -122,18 +123,11 @@ static void activate(GtkApplication* app, gpointer user_data)
 //  PUBLIC FUNCTIONS IMPLEMENTATION
 // ******************************************************************
 
-void gui_init()
+void gui_start(gui_start_callback_t callback)
 {
-   app = gtk_application_new(NULL, G_APPLICATION_FLAGS_NONE);
-   g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+   GtkApplication *app = gtk_application_new(NULL, G_APPLICATION_FLAGS_NONE);
+   g_signal_connect(app, "activate", G_CALLBACK(activate), (gpointer)callback);
 
-   //g_thread_new ("dummy", (GThreadFunc)updateTray, NULL);
-   //return status;
-}
-
-
-void gui_start()
-{
    g_application_run(G_APPLICATION(app), 0, NULL);
    g_object_unref(app);
 }
