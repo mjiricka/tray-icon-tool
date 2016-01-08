@@ -7,7 +7,12 @@
 #include "commons.h"
 
 
-void run_client(char *socket_path, char *title)
+
+// ******************************************************************
+//  PUBLIC FUNCTIONS IMPLEMENTATION
+// ******************************************************************
+
+void client_run(char *socket_path, char *title)
 {
    int soc;
    struct sockaddr_un addr;
@@ -33,3 +38,4 @@ void run_client(char *socket_path, char *title)
       exit(EXIT_FAILURE);
    }
 }
+

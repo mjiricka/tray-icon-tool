@@ -5,51 +5,28 @@
 #include <sys/un.h>
 #include <gtk/gtk.h>
 
+#include "server.h"
+
 #include "commons.h"
 #include "gui.h"
 
 
+
 typedef void (*callback_t)(struct tray_icon_data *tid);
 
-void socket_listen(char *socket_path, char *title, callback_t c);
-
-void socket_listen_lambda(gpointer data);
 
 
-void update_trace_icon (struct tray_icon_data *tid)
+// ******************************************************************
+//  PRIVATE FUNCTIONS IMPLEMENTATION
+// ******************************************************************
+
+static void update_trace_icon(struct tray_icon_data *tid)
 {
    gui_set(tid->msg);
 }
 
-char *socket_path_global;
-char *title_global;
-callback_t c_global;
 
-void socket_listen_lambda(gpointer data)
-{
-   socket_listen(socket_path_global, title_global, c_global);
-}
-
-
-void run_server(char *socket_path, char *title)
-{
-   // I hope this will be OK.
-
-   // First gui: to be ready to accept update.
-   gui_init();
-
-   // Start listening.
-   //socket_listen(socket_path, title, update_trace_icon);
-   socket_path_global = socket_path;
-   title_global = title;
-   c_global = update_trace_icon;
-   g_thread_new ("dummy", (GThreadFunc)socket_listen_lambda, NULL);
-
-   gui_start();
-}
-
-
-void socket_listen(char *socket_path, char *title, callback_t c)
+static void socket_listen(char *socket_path, char *title, callback_t c)
 {
    int soc;
    struct sockaddr_un addr;
@@ -101,3 +78,39 @@ void socket_listen(char *socket_path, char *title, callback_t c)
       }
    }
 }
+
+
+static char *socket_path_global;
+static char *title_global;
+static callback_t c_global;
+
+static void socket_listen_lambda(gpointer data)
+{
+   socket_listen(socket_path_global, title_global, c_global);
+}
+
+
+
+// ******************************************************************
+//  PUBLIC FUNCTIONS IMPLEMENTATION
+// ******************************************************************
+
+void server_run(char *socket_path, char *title)
+{
+   // TODO: revisit.
+
+   // I hope this will be OK.
+
+   // First gui: to be ready to accept update.
+   gui_init();
+
+   // Start listening.
+   //socket_listen(socket_path, title, update_trace_icon);
+   socket_path_global = socket_path;
+   title_global = title;
+   c_global = update_trace_icon;
+   g_thread_new("dummy", (GThreadFunc)socket_listen_lambda, NULL);
+
+   gui_start();
+}
+

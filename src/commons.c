@@ -7,6 +7,10 @@
 #include "commons.h"
 
 
+// ******************************************************************
+//  PUBLIC FUNCTIONS IMPLEMENTATION
+// ******************************************************************
+
 void init_tray_icon_data(struct tray_icon_data *tid, char *msg)
 {
    strncpy(tid->msg, msg, 7);
@@ -16,6 +20,7 @@ void init_tray_icon_data(struct tray_icon_data *tid, char *msg)
    tid->g = 1.0;
    tid->b = 1.0;
 }
+
 
 void prepare_connection(const char *socket_path, int *soc, struct sockaddr_un *addr)
 {

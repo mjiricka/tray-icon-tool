@@ -28,10 +28,10 @@ int main (int argc, char **argv)
 
    if (strcmp(argv[1], "client") == 0) {
       printf("Starting client...\n");
-      run_client(socket_path, title);
+      client_run(socket_path, title);
    } else if (strcmp(argv[1], "server") == 0) {
       printf("Starting server...\n");
-      run_server(socket_path, title);
+      server_run(socket_path, title);
    } else {
       fprintf(stderr, "Bad param.\n");
       return EXIT_FAILURE;
