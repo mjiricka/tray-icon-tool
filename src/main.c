@@ -6,15 +6,13 @@
 #include "client.h"
 #include "server.h"
 
-// TODO: include header filu,
+// TODO: 
 // chytani signalu,
 // zkusit valgrind pred gtk,
-// typedef na struct,
-// komenty na lokalni/public
 // debug vypis pres -v param?
 // argparse
 
-// (start|set) <tmpfile> <start string> <color> [<tooltip>] [<script>]
+// (client|server) <tmpfile> <start string> <color> [<tooltip>] [<script>]
 
 int main (int argc, char **argv)
 {
