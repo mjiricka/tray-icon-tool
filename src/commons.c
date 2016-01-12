@@ -16,8 +16,7 @@ void init_tray_icon_data(
 {
    strncpy(tid->msg, msg, 7);
    tid->msg[7] = '\0';
-
-   tid->color.r = color->r;
+   tid->color = *color;
 }
 
 

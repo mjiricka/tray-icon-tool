@@ -4,6 +4,7 @@
 
 #include "gui.h"
 #include "commons.h"
+#include "utils.h"
 
 
 #define TEXT_SURFACE_SIZE 100
@@ -20,7 +21,7 @@ static GtkStatusIcon *tray_icon;
 //  PRIVATE FUNCTIONS IMPLEMENTATION
 // ******************************************************************
 
-static GdkPixbuf *getPixBuf(const char *utf8)
+static GdkPixbuf *getPixBuf(const char *utf8, struct rgb_color *color)
 {
    // Preprare Cairo objects.
    cairo_surface_t *surface = cairo_image_surface_create(
@@ -38,7 +39,9 @@ static GdkPixbuf *getPixBuf(const char *utf8)
       cr, "monospace", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
    cairo_set_font_size(cr, TEXT_BASE);
    cairo_move_to(cr, TEXT_BASE, TEXT_BASE);
-   cairo_set_source_rgba(cr, 0.0, 1.0, 1.0, 1.0);
+   //cairo_set_source_rgba(cr, color->r, color->g, color->b, 1.0);
+   //printf("%f %f %f\n", color->r, color->g, color->b);
+   cairo_set_source_rgb(cr, color->r, color->g, color->b);
    cairo_show_text(cr, utf8);
 
    // Get sizes.
@@ -73,7 +76,7 @@ static GdkPixbuf *getPixBuf(const char *utf8)
 
 static gboolean update_entry(struct tray_icon_data *tid)
 {
-   GdkPixbuf *pixbufout = getPixBuf(tid->msg);
+   GdkPixbuf *pixbufout = getPixBuf(tid->msg, &tid->color);
    gtk_status_icon_set_from_pixbuf(tray_icon, pixbufout);
 
    free(tid);
@@ -103,12 +106,13 @@ static void activate(GtkApplication* app, gpointer gui_started)
    gtk_window_set_title(GTK_WINDOW(window), "Welcome to GNOME");
    gtk_window_set_default_size(GTK_WINDOW(window), 100, 100);
 
-   GdkPixbuf *pixbufout = getPixBuf("BLE");
+   struct rgb_color c;
+   GdkPixbuf *pixbufout = getPixBuf("BLE", &c);
    GtkWidget *pb = gtk_image_new_from_pixbuf(pixbufout);
    gtk_container_add(GTK_CONTAINER(window), pb);
 
    // Show status icon.
-   tray_icon = gtk_status_icon_new ();
+   tray_icon = gtk_status_icon_new();
    gtk_status_icon_set_from_pixbuf(tray_icon, pixbufout);
    gtk_status_icon_set_visible(tray_icon, TRUE);
 
