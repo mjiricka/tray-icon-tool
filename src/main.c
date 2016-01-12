@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "utils.h"
+#include "commons.h"
 #include "client.h"
 #include "server.h"
 
@@ -37,12 +38,15 @@ int main (int argc, char **argv)
       parse_color("FFFFFF", &color);
    }
 
+   struct tray_icon_data tid;
+   init_tray_icon_data(&tid, title, &color);
+
    if (strcmp(argv[1], "client") == 0) {
       printf("Starting client...\n");
       client_run(socket_path, title);
    } else if (strcmp(argv[1], "server") == 0) {
       printf("Starting server...\n");
-      server_run(socket_path, title);
+      server_run(socket_path, &tid);
    } else {
       fprintf(stderr, "Bad param.\n");
       return EXIT_FAILURE;

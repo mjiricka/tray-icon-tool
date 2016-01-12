@@ -22,11 +22,11 @@ typedef void (*callback_t)(struct tray_icon_data *tid);
 
 static void update_trace_icon(struct tray_icon_data *tid)
 {
-   gui_set(tid->msg);
+   gui_set(tid);
 }
 
 
-static void socket_listen(char *socket_path, char *title, callback_t c)
+static void socket_listen(char *socket_path, callback_t c)
 {
    int soc;
    struct sockaddr_un addr;
@@ -65,7 +65,7 @@ static void socket_listen(char *socket_path, char *title, callback_t c)
       }
 
       // Read incoming structure.
-      ssize_t rc = read(cli,&buf,sizeof(buf));
+      ssize_t rc = read(cli, &buf, sizeof(buf));
       close(cli);
 
       // Check result.
@@ -81,12 +81,12 @@ static void socket_listen(char *socket_path, char *title, callback_t c)
 
 
 static char *socket_path_global;
-static char *title_global;
+static struct tray_icon_data tid_global;
 static callback_t c_global;
 
 static void socket_listen_lambda(gpointer data)
 {
-   socket_listen(socket_path_global, title_global, c_global);
+   socket_listen(socket_path_global, c_global);
 }
 
 
@@ -95,6 +95,8 @@ static void start_socket()
    // Start listening in new thread, because current thread
    // is used by GTK.
    g_thread_new("dummy", (GThreadFunc)socket_listen_lambda, NULL);
+
+   gui_set(&tid_global);
 }
 
 
@@ -102,10 +104,10 @@ static void start_socket()
 //  PUBLIC FUNCTIONS IMPLEMENTATION
 // ******************************************************************
 
-void server_run(char *socket_path, char *title)
+void server_run(char *socket_path, struct tray_icon_data *tid)
 {
    socket_path_global = socket_path;
-   title_global = title;
+   tid_global = *tid;
    c_global = update_trace_icon;
 
    gui_start(start_socket);

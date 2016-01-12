@@ -6,6 +6,7 @@
  * and client side of app.
  */
 
+#include <sys/un.h>
 #include "utils.h"
 
 
@@ -18,7 +19,8 @@ struct tray_icon_data {
 void init_tray_icon_data(
    struct tray_icon_data *tid, char *msg, struct rgb_color *color);
 
-void prepare_connection(const char *socket_path, int *soc, struct sockaddr_un *addr);
+void prepare_connection(
+   const char *socket_path, int *soc, struct sockaddr_un *addr);
 
 
 #endif /* COMMONS_H */

@@ -3,6 +3,7 @@
 #include <gtk/gtk.h>
 
 #include "gui.h"
+#include "commons.h"
 
 
 #define TEXT_SURFACE_SIZE 100
@@ -12,7 +13,7 @@
 
 // In initialized in "active" function.
 static GtkStatusIcon *tray_icon;
-
+// TODO: https://developer.gnome.org/gtk3/3.0/GtkStatusIcon.html#gtk-status-icon-set-tooltip-text
 
 
 // ******************************************************************
@@ -70,14 +71,14 @@ static GdkPixbuf *getPixBuf(const char *utf8)
 }
 
 
-static gboolean update_entry(char *str)
+static gboolean update_entry(struct tray_icon_data *tid)
 {
-	GdkPixbuf *pixbufout = getPixBuf(str);
-	gtk_status_icon_set_from_pixbuf(tray_icon, pixbufout);
+   GdkPixbuf *pixbufout = getPixBuf(tid->msg);
+   gtk_status_icon_set_from_pixbuf(tray_icon, pixbufout);
 
-	free(str);
+   free(tid);
 
-	return G_SOURCE_REMOVE;
+   return G_SOURCE_REMOVE;
 }
 
 
@@ -126,18 +127,20 @@ static void activate(GtkApplication* app, gpointer gui_started)
 void gui_start(gui_start_callback_t callback)
 {
    GtkApplication *app = gtk_application_new(NULL, G_APPLICATION_FLAGS_NONE);
-   g_signal_connect(app, "activate", G_CALLBACK(activate), (gpointer)callback);
+   g_signal_connect(
+      app, "activate", G_CALLBACK(activate), (gpointer) callback);
 
    g_application_run(G_APPLICATION(app), 0, NULL);
    g_object_unref(app);
 }
 
 
-void gui_set(char *str)
+void gui_set(struct tray_icon_data *tid)
 {
    // TODO: check!!
-   char *str_copy = (char *) malloc(sizeof(char) * 20);
-   strcpy(str_copy, str);
-   gdk_threads_add_idle((GSourceFunc) update_entry, str_copy);
+   struct tray_icon_data *tid_copy =
+      (struct tray_icon_data *) malloc(sizeof(*tid));
+   memcpy(tid_copy, tid, sizeof(*tid));
+   gdk_threads_add_idle((GSourceFunc) update_entry, tid_copy);
 }
 

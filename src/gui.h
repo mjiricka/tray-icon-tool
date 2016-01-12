@@ -5,13 +5,15 @@
  * Module for handling gui, i.e. tray icon.
  */
 
+#include "commons.h"
+
 
 typedef void (*gui_start_callback_t)(void);
 
 
 void gui_start(gui_start_callback_t callback);
 
-void gui_set(char *str);
+void gui_set(struct tray_icon_data *tid);
 
 
 #endif /* GUI_H */
