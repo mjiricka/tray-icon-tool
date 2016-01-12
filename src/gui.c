@@ -16,6 +16,8 @@
 static GtkStatusIcon *tray_icon;
 // TODO: https://developer.gnome.org/gtk3/3.0/GtkStatusIcon.html#gtk-status-icon-set-tooltip-text
 
+static struct tray_icon_data current_tid;
+
 
 // ******************************************************************
 //  PRIVATE FUNCTIONS IMPLEMENTATION
@@ -106,8 +108,7 @@ static void activate(GtkApplication* app, gpointer gui_started)
    gtk_window_set_title(GTK_WINDOW(window), "Welcome to GNOME");
    gtk_window_set_default_size(GTK_WINDOW(window), 100, 100);
 
-   struct rgb_color c;
-   GdkPixbuf *pixbufout = getPixBuf("BLE", &c);
+   GdkPixbuf *pixbufout = getPixBuf(current_tid.msg, &current_tid.color);
    GtkWidget *pb = gtk_image_new_from_pixbuf(pixbufout);
    gtk_container_add(GTK_CONTAINER(window), pb);
 
@@ -128,8 +129,12 @@ static void activate(GtkApplication* app, gpointer gui_started)
 //  PUBLIC FUNCTIONS IMPLEMENTATION
 // ******************************************************************
 
-void gui_start(gui_start_callback_t callback)
+void gui_start(gui_start_callback_t callback, struct tray_icon_data *tid)
 {
+   // Set initial state as current state.
+   current_tid = *tid;
+
+   // Start GTK.
    GtkApplication *app = gtk_application_new(NULL, G_APPLICATION_FLAGS_NONE);
    g_signal_connect(
       app, "activate", G_CALLBACK(activate), (gpointer) callback);

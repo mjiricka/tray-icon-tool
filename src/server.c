@@ -81,7 +81,6 @@ static void socket_listen(char *socket_path, callback_t c)
 
 
 static char *socket_path_global;
-static struct tray_icon_data tid_global;
 static callback_t c_global;
 
 static void socket_listen_lambda(gpointer data)
@@ -95,8 +94,6 @@ static void start_socket()
    // Start listening in new thread, because current thread
    // is used by GTK.
    g_thread_new("dummy", (GThreadFunc)socket_listen_lambda, NULL);
-
-   gui_set(&tid_global);
 }
 
 
@@ -107,9 +104,8 @@ static void start_socket()
 void server_run(char *socket_path, struct tray_icon_data *tid)
 {
    socket_path_global = socket_path;
-   tid_global = *tid;
    c_global = update_trace_icon;
 
-   gui_start(start_socket);
+   gui_start(start_socket, tid);
 }
 
