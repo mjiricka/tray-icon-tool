@@ -43,7 +43,7 @@ int main (int argc, char **argv)
 
    if (strcmp(argv[1], "client") == 0) {
       printf("Starting client...\n");
-      client_run(socket_path, title);
+      client_run(socket_path, &tid);
    } else if (strcmp(argv[1], "server") == 0) {
       printf("Starting server...\n");
       server_run(socket_path, &tid);

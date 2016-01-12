@@ -14,7 +14,7 @@
 //  PUBLIC FUNCTIONS IMPLEMENTATION
 // ******************************************************************
 
-void client_run(char *socket_path, char *title)
+void client_run(char *socket_path, struct tray_icon_data *tid)
 {
    int soc;
    struct sockaddr_un addr;
@@ -26,17 +26,12 @@ void client_run(char *socket_path, char *title)
       exit(EXIT_FAILURE);
    }
 
-   // Prepare structure to send.
-   struct tray_icon_data buf;
-   struct rgb_color c;
-   init_tray_icon_data(&buf, title, &c);
-
-   // Send it.
-   ssize_t ret = write(soc, &buf, sizeof(buf));
+   // Send data.
+   ssize_t ret = write(soc, tid, sizeof(*tid));
    close(soc);
 
    // Check result.
-   if (ret != sizeof(buf)) {
+   if (ret != sizeof(*tid)) {
       perror("Write error");
       exit(EXIT_FAILURE);
    }

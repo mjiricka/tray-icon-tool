@@ -5,8 +5,10 @@
  * Client side of the app.
  */
 
+#include "commons.h"
 
-void client_run(char *socket_path, char *title);
+
+void client_run(char *socket_path, struct tray_icon_data *tid);
 
 
 #endif /* CLIENT_H */
