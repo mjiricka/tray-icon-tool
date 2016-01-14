@@ -16,11 +16,11 @@ void init_tray_icon_data(
    char *msg, struct rgb_color *color,
    const char *tooltip)
 {
-   // TODO: get rid of 7 and 127.
-   strncpy(tid->msg, msg, 7);
-   tid->msg[7] = '\0';
+   strncpy(tid->msg, msg, sizeof(tid->msg)-1);
+   tid->msg[sizeof(tid->msg)-1] = '\0';
    tid->color = *color;
-   strncpy(tid->tooltip, tooltip, 127);
+   strncpy(tid->tooltip, tooltip, sizeof(tid->tooltip)-1);
+   tid->tooltip[sizeof(tid->tooltip)-1] = '\0';
 }
 
 
