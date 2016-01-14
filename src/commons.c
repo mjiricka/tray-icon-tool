@@ -12,11 +12,15 @@
 // ******************************************************************
 
 void init_tray_icon_data(
-   struct tray_icon_data *tid, char *msg, struct rgb_color *color)
+   struct tray_icon_data *tid,
+   char *msg, struct rgb_color *color,
+   const char *tooltip)
 {
+   // TODO: get rid of 7 and 127.
    strncpy(tid->msg, msg, 7);
    tid->msg[7] = '\0';
    tid->color = *color;
+   strncpy(tid->tooltip, tooltip, 127);
 }
 
 

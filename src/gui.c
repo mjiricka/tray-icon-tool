@@ -80,6 +80,7 @@ static gboolean update_entry(struct tray_icon_data *tid)
 {
    GdkPixbuf *pixbufout = getPixBuf(tid->msg, &tid->color);
    gtk_status_icon_set_from_pixbuf(tray_icon, pixbufout);
+   gtk_status_icon_set_tooltip_text(tray_icon, tid->tooltip);
 
    // Remember this as last entry.
    current_tid = *tid;

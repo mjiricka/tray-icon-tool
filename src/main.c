@@ -26,6 +26,7 @@ int main (int argc, char **argv)
    char *action_name = argv[1];
    char *socket_path = argv[2];
    char *title = argv[3];
+   char *tooltip = "";
    struct rgb_color color;
 
    if (5 <= argc) {
@@ -33,13 +34,17 @@ int main (int argc, char **argv)
          fprintf(stderr, "Bad color format (e.g. FF0099).\n");
          return EXIT_FAILURE;
       }
+
+      if (6 <= argc) {
+         tooltip = argv[5];
+      }
    } else {
       // White is default.
       parse_color("FFFFFF", &color);
    }
 
    struct tray_icon_data tid;
-   init_tray_icon_data(&tid, title, &color);
+   init_tray_icon_data(&tid, title, &color, tooltip);
 
    if (strcmp(argv[1], "client") == 0) {
       printf("Starting client...\n");
