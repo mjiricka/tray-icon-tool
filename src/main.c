@@ -14,6 +14,7 @@
 // argparse
 
 // (client|server) <tmpfile> <start string> <color> [<tooltip>] [<script>]
+// script ... maybe you want use &
 
 int main (int argc, char **argv)
 {
@@ -27,6 +28,7 @@ int main (int argc, char **argv)
    char *socket_path = argv[2];
    char *title = argv[3];
    char *tooltip = "";
+   char *on_click_command = "";
    struct rgb_color color;
 
    if (5 <= argc) {
@@ -37,6 +39,10 @@ int main (int argc, char **argv)
 
       if (6 <= argc) {
          tooltip = argv[5];
+
+         if (7 <= argc) {
+            on_click_command = argv[6];
+         }
       }
    } else {
       // White is default.
@@ -44,7 +50,7 @@ int main (int argc, char **argv)
    }
 
    struct tray_icon_data tid;
-   init_tray_icon_data(&tid, title, &color, tooltip);
+   init_tray_icon_data(&tid, title, &color, tooltip, on_click_command);
 
    if (strcmp(argv[1], "client") == 0) {
       printf("Starting client...\n");

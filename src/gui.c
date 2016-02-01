@@ -102,6 +102,15 @@ static void updateTray(gpointer user_data)
 }
 
 
+static gboolean on_click(GtkStatusIcon *status_icon, GdkEvent *event, gpointer user_data)
+{
+   if (0 < strlen(current_tid.on_click_command)) {
+      system(current_tid.on_click_command);
+   }
+   return TRUE; // Stop propagation.
+}
+
+
 static void activate(GtkApplication* app, gpointer gui_started)
 {
    // TODO: zkouknout jeste
@@ -121,7 +130,10 @@ static void activate(GtkApplication* app, gpointer gui_started)
    gtk_status_icon_set_from_pixbuf(tray_icon, pixbufout);
    gtk_status_icon_set_visible(tray_icon, TRUE);
 
-   //gtk_widget_show_all (window);
+   g_signal_connect(
+      tray_icon, "button-release-event", G_CALLBACK(on_click), NULL);
+
+   gtk_widget_show_all (window);
 
    // Notify that thread is activated.
    ((gui_start_callback_t) gui_started)();

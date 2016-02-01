@@ -14,13 +14,18 @@
 void init_tray_icon_data(
    struct tray_icon_data *tid,
    char *msg, struct rgb_color *color,
-   const char *tooltip)
+   const char *tooltip,
+   const char *on_click_command)
 {
    strncpy(tid->msg, msg, sizeof(tid->msg)-1);
    tid->msg[sizeof(tid->msg)-1] = '\0';
    tid->color = *color;
+
    strncpy(tid->tooltip, tooltip, sizeof(tid->tooltip)-1);
    tid->tooltip[sizeof(tid->tooltip)-1] = '\0';
+
+   strncpy(tid->on_click_command, on_click_command,sizeof(tid->on_click_command)-1);
+   tid->on_click_command[sizeof(tid->on_click_command)-1] = '\0';
 }
 
 
