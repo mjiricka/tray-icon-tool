@@ -13,7 +13,8 @@
 
 void init_tray_icon_data(
    struct tray_icon_data *tid,
-   char *msg, struct rgb_color *color,
+   const char *msg,
+   struct rgb_color *color,
    const char *tooltip,
    const char *on_click_command)
 {
