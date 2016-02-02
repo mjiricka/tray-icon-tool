@@ -13,14 +13,32 @@
 // debug vypis pres -v param?
 // argparse
 
-// (client|server) <tmpfile> <start string> <color> [<tooltip>] [<script>]
-// script ... maybe you want use &
+
+void print_usage(char *prog_name)
+{
+   printf("USAGE: %s <server|client> <temp file> <label> <color> [<tooltip>] [<script>]\n", prog_name);
+   printf("where:\n");
+   printf("   Server displays tray icon. Client can change the icon.\n");
+   printf("   temp file:\n");
+   printf("      Path where program opens communication socket between server and client.\n");
+   printf("   label: \n");
+   printf("      Text to display in icon tray. Text should be max 3 characters long.\n");
+   printf("   color:\n");
+   printf("      Color of text. Format is RRGGBB, for example: FF0000 for red text.\n");
+   printf("   tooltip:\n");
+   printf("      Tooltip to display on icon.\n");
+   printf("   script:\n");
+   printf("      Script to run when user clicks on icon. Consider to use \"&\".\n");
+   printf("\n");
+}
+
 
 int main (int argc, char **argv)
 {
    // TODO: define upper bound.
    if (argc < 4) {
-      fprintf(stderr, "Bad param.\n");
+      fprintf(stderr, "Not enough parameters.\n\n");
+      print_usage(argv[0]);
 	  return EXIT_FAILURE;
    }
 
@@ -33,7 +51,8 @@ int main (int argc, char **argv)
 
    if (5 <= argc) {
       if (parse_color(argv[4], &color)) {
-         fprintf(stderr, "Bad color format (e.g. FF0099).\n");
+         fprintf(stderr, "Bad color format (e.g. FF0099).\n\n");
+         print_usage(argv[0]);
          return EXIT_FAILURE;
       }
 
@@ -59,7 +78,8 @@ int main (int argc, char **argv)
       printf("Starting server...\n");
       server_run(socket_path, &tid);
    } else {
-      fprintf(stderr, "Bad param.\n");
+      fprintf(stderr, "Bad param %s, must be client or socket.\n\n", argv[1]);
+      print_usage(argv[0]);
       return EXIT_FAILURE;
    }
 
