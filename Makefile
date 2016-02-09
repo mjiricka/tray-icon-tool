@@ -1,5 +1,4 @@
 
-
 SOURCES := \
    main.c \
    server.c \
@@ -14,7 +13,12 @@ SOURCES_ROOT := src/
 OBJECTS := $(addsuffix .o, $(basename $(SOURCES)))
 OBJECTS := $(addprefix $(SOURCES_ROOT), $(OBJECTS))
 
-PARAMS := `pkg-config --cflags --libs gtk+-3.0` -Wno-deprecated-declarations
+# -Wno-deprecated-declarations: Whole gtk_status_icon
+#   is deprecated, but I want status icon!
+PARAMS := -Wall \
+   -Wno-deprecated-declarations \
+   -std=c99 \
+   `pkg-config --cflags --libs gtk+-3.0`
 
 .DEFAULT_GOAL := all
 .PHONY: all clean
@@ -30,7 +34,8 @@ ${OUTPUT_DIR}/util: ${OBJECTS}
 	gcc -c -o $@ $< ${PARAMS}
 
 clean:
-	rm -rf ${OUTPUT_DIR}
+	#rm -rf ${OUTPUT_DIR}
+	rm ${OUTPUT_DIR}/*
 	find ${SOURCES_ROOT} -name '*.o' -exec rm -f \{\} \;
 
 all: ${OUTPUT_DIR} ${OUTPUT_DIR}/util
