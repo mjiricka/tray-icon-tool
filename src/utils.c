@@ -29,10 +29,9 @@ int parse_color(char *str, struct rgb_color *c)
 		return 1;
 	}
 
-	char i = 0;
-	c->r = (hex2dec(str[i++])*16 + hex2dec(str[i++])) / 255.0;
-	c->g = (hex2dec(str[i++])*16 + hex2dec(str[i++])) / 255.0;
-	c->b = (hex2dec(str[i++])*16 + hex2dec(str[i++])) / 255.0;
+	c->r = (hex2dec(str[0])*16 + hex2dec(str[1])) / 255.0;
+	c->g = (hex2dec(str[2])*16 + hex2dec(str[3])) / 255.0;
+	c->b = (hex2dec(str[4])*16 + hex2dec(str[5])) / 255.0;
 	return (c->r<0) || (c->g<0) || (c->b<0);
 }
 

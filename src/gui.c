@@ -91,17 +91,6 @@ static gboolean update_entry(struct tray_icon_data *tid)
 }
 
 
-static void updateTray(gpointer user_data)
-{
-   // TODO: buffer size
-   while (1) {
-      char *str = (char *) malloc(sizeof(char) * 20);
-      scanf("%s", str);
-      gdk_threads_add_idle((GSourceFunc) update_entry, str);
-   }
-}
-
-
 static gboolean on_click(GtkStatusIcon *status_icon, GdkEvent *event, gpointer user_data)
 {
    if (0 < strlen(current_tid.on_click_command)) {

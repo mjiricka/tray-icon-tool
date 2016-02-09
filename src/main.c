@@ -71,7 +71,7 @@ int main (int argc, char **argv)
    struct tray_icon_data tid;
    init_tray_icon_data(&tid, title, &color, tooltip, on_click_command);
 
-   if (strcmp(argv[1], "client") == 0) {
+   if (strcmp(action_name, "client") == 0) {
       printf("Starting client...\n");
       client_run(socket_path, &tid);
    } else if (strcmp(argv[1], "server") == 0) {
