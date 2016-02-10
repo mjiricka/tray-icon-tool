@@ -15,28 +15,46 @@ OBJECTS := $(addprefix $(SOURCES_ROOT), $(OBJECTS))
 
 # -Wno-deprecated-declarations: Whole gtk_status_icon
 #   is deprecated, but I want status icon!
-PARAMS := -Wall \
+FLAGS := -Wall \
    -Wno-deprecated-declarations \
    -std=c99 \
    `pkg-config --cflags --libs gtk+-3.0`
 
-.DEFAULT_GOAL := all
-.PHONY: all clean
+FLAGS_DEBUG := -DDEBUG -O0 -g
+FLAGS_RELEASE := -O2 -s
+
+
+debug: FLAGS += $(FLAGS_DEBUG)
+release: FLAGS += $(FLAGS_RELEASE)
+
+
+.DEFAULT_GOAL := error
+.PHONY: error debug release all clean distclean
 
 
 ${OUTPUT_DIR}:
 	mkdir ${OUTPUT_DIR}
 
 ${OUTPUT_DIR}/util: ${OBJECTS}
-	gcc ${OBJECTS} -o ${OUTPUT_DIR}/util ${PARAMS}
+	gcc ${OBJECTS} -o ${OUTPUT_DIR}/util ${FLAGS}
 
 %.o: %.c
-	gcc -c -o $@ $< ${PARAMS}
+	gcc -c -o $@ $< ${FLAGS}
 
 clean:
-	#rm -rf ${OUTPUT_DIR}
-	rm ${OUTPUT_DIR}/*
+	rm -f ${OUTPUT_DIR}/*
 	find ${SOURCES_ROOT} -name '*.o' -exec rm -f \{\} \;
 
+distclean: clean
+	rmdir ${OUTPUT_DIR}
+
 all: ${OUTPUT_DIR} ${OUTPUT_DIR}/util
+
+debug: all
+
+release: all
+
+error:
+	@echo "You must specify either target 'debug' or 'release'."
+
 
