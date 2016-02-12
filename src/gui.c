@@ -41,9 +41,7 @@ static GdkPixbuf *getPixBuf(const char *utf8, struct rgb_color *color)
       cr, "monospace", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
    cairo_set_font_size(cr, TEXT_BASE);
    cairo_move_to(cr, TEXT_BASE, TEXT_BASE);
-   //cairo_set_source_rgba(cr, color->r, color->g, color->b, 1.0);
-   //printf("%f %f %f\n", color->r, color->g, color->b);
-   cairo_set_source_rgb(cr, color->r, color->g, color->b);
+   cairo_set_source_rgba(cr, color->r, color->g, color->b, 1.0);
    cairo_show_text(cr, utf8);
 
    // Get sizes.
