@@ -101,16 +101,19 @@ static gboolean on_click(GtkStatusIcon *status_icon, GdkEvent *event, gpointer u
 static void activate(GtkApplication* app, gpointer gui_started)
 {
    // TODO: zkouknout jeste
+   GdkPixbuf *pixbufout = getPixBuf(current_tid.msg, &current_tid.color);
 
-   GtkWidget *window;
-
-   window = gtk_application_window_new(app);
+#ifdef DEBUG
+   // In debug mode display also window with larger pixbuf.
+   GtkWidget *window = gtk_application_window_new(app);
    gtk_window_set_title(GTK_WINDOW(window), "Welcome to GNOME");
    gtk_window_set_default_size(GTK_WINDOW(window), 100, 100);
 
-   GdkPixbuf *pixbufout = getPixBuf(current_tid.msg, &current_tid.color);
    GtkWidget *pb = gtk_image_new_from_pixbuf(pixbufout);
    gtk_container_add(GTK_CONTAINER(window), pb);
+
+   gtk_widget_show_all (window);
+#endif
 
    // Show status icon.
    tray_icon = gtk_status_icon_new();
@@ -120,7 +123,6 @@ static void activate(GtkApplication* app, gpointer gui_started)
    g_signal_connect(
       tray_icon, "button-release-event", G_CALLBACK(on_click), NULL);
 
-   gtk_widget_show_all (window);
 
    // Notify that thread is activated.
    ((gui_start_callback_t) gui_started)();
