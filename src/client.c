@@ -6,9 +6,6 @@
 
 #include "commons.h"
 
-// TODO: delete when client_run gets whole struct.
-#include "utils.h"
-
 
 // ******************************************************************
 //  PUBLIC FUNCTIONS IMPLEMENTATION
