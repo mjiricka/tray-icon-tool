@@ -15,4 +15,11 @@ struct rgb_color {
 int parse_color(char *str, struct rgb_color *c);
 
 
+#ifdef DEBUG
+   #define log(...) printf(__VA_ARGS__)
+#else
+   #define log(...)
+#endif
+
+
 #endif /* UTILS_H */

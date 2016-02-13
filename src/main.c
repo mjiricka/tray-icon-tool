@@ -72,10 +72,10 @@ int main (int argc, char **argv)
    init_tray_icon_data(&tid, title, &color, tooltip, on_click_command);
 
    if (strcmp(action_name, "client") == 0) {
-      printf("Starting client...\n");
+      log("Starting client...\n");
       client_run(socket_path, &tid);
    } else if (strcmp(argv[1], "server") == 0) {
-      printf("Starting server...\n");
+      log("Starting server...\n");
       server_run(socket_path, &tid);
    } else {
       fprintf(stderr, "Bad param %s, must be client or socket.\n\n", argv[1]);

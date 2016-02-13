@@ -54,9 +54,6 @@ static void socket_listen(char *socket_path, callback_t c)
    int cli;
    struct tray_icon_data buf;
 
-   // TODO: debug
-   printf("posloucham..\n");
-
    while (1) {
       // Accept connection, do not care about client's socket struct.
       if ((cli = accept(soc, NULL, NULL)) == -1) {
@@ -70,7 +67,7 @@ static void socket_listen(char *socket_path, callback_t c)
 
       // Check result.
       if (rc == sizeof(buf)) {
-         printf("read %zu bytes: %s %f\n", rc, buf.msg, buf.color.r);
+         log("read %zu bytes: %s %f\n", rc, buf.msg, buf.color.r);
          c(&buf);
       } else {
          perror("Bad read");
