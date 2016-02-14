@@ -16,6 +16,8 @@
 static GtkStatusIcon *tray_icon;
 // TODO: https://developer.gnome.org/gtk3/3.0/GtkStatusIcon.html#gtk-status-icon-set-tooltip-text
 
+GtkWidget *window;
+
 static struct tray_icon_data current_tid;
 
 
@@ -103,16 +105,19 @@ static void activate(GtkApplication* app, gpointer gui_started)
    // TODO: zkouknout jeste
    GdkPixbuf *pixbufout = getPixBuf(current_tid.msg, &current_tid.color);
 
+   window = gtk_application_window_new(app);
+
 #ifdef DEBUG
    // In debug mode display also window with larger pixbuf.
-   GtkWidget *window = gtk_application_window_new(app);
    gtk_window_set_title(GTK_WINDOW(window), "Welcome to GNOME");
    gtk_window_set_default_size(GTK_WINDOW(window), 100, 100);
 
    GtkWidget *pb = gtk_image_new_from_pixbuf(pixbufout);
    gtk_container_add(GTK_CONTAINER(window), pb);
-
-   gtk_widget_show_all (window);
+#endif
+   gtk_widget_show_all(window);
+#ifndef DEBUG
+   gtk_widget_hide(window);
 #endif
 
    // Show status icon.
