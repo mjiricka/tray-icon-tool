@@ -15,5 +15,7 @@ void gui_start(gui_start_callback_t callback, struct tray_icon_data *tid);
 
 void gui_set(struct tray_icon_data *tid);
 
+void gui_quit(void);
+
 
 #endif /* GUI_H */

@@ -163,3 +163,12 @@ void gui_set(struct tray_icon_data *tid)
    gdk_threads_add_idle((GSourceFunc) update_entry, tid_copy);
 }
 
+
+void gui_quit(void)
+{
+   gtk_status_icon_set_visible(tray_icon, FALSE);
+   gtk_window_close(GTK_WINDOW(window));
+   gtk_widget_destroy(window);
+   g_object_unref(tray_icon);
+}
+

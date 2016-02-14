@@ -1,17 +1,16 @@
-#include <stdlib.h>
+#include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "utils.h"
 #include "commons.h"
 #include "client.h"
 #include "server.h"
+#include "gui.h"
 
 // TODO: 
-// chytani signalu,
-// zkusit valgrind pred gtk,
-// debug vypis pres -v param?
-// argparse
+// zkusit valgrind pred gtk
 
 
 void print_usage(char *prog_name)
@@ -33,8 +32,19 @@ void print_usage(char *prog_name)
 }
 
 
+void sig_handler(int signo)
+{
+   if (signo == SIGINT) {
+      log("received SIGINT\n");
+      gui_quit();
+   }
+}
+
+
 int main (int argc, char **argv)
 {
+   signal(SIGINT, sig_handler);
+
    // TODO: define upper bound.
    if (argc < 4) {
       fprintf(stderr, "Not enough parameters.\n\n");
@@ -83,6 +93,7 @@ int main (int argc, char **argv)
       return EXIT_FAILURE;
    }
 
+   log("Succesful quit.");
    return EXIT_SUCCESS;
 }
 
