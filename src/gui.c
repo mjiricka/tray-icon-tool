@@ -124,6 +124,7 @@ static void activate(GtkApplication* app, gpointer gui_started)
    tray_icon = gtk_status_icon_new();
    gtk_status_icon_set_from_pixbuf(tray_icon, pixbufout);
    gtk_status_icon_set_visible(tray_icon, TRUE);
+   gtk_status_icon_set_tooltip_text(tray_icon, current_tid.tooltip);
 
    g_signal_connect(
       tray_icon, "button-release-event", G_CALLBACK(on_click), NULL);
