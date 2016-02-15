@@ -93,7 +93,7 @@ int main (int argc, char **argv)
       return EXIT_FAILURE;
    }
 
-   log("Succesful quit.");
+   log("Succesful quit.\n");
    return EXIT_SUCCESS;
 }
 
