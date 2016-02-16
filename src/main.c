@@ -9,8 +9,6 @@
 #include "server.h"
 #include "gui.h"
 
-// TODO: 
-// zkusit valgrind pred gtk
 
 
 void print_usage(char *prog_name)
@@ -45,7 +43,6 @@ int main (int argc, char **argv)
 {
    signal(SIGINT, sig_handler);
 
-   // TODO: define upper bound.
    if (argc < 4) {
       fprintf(stderr, "Not enough parameters.\n\n");
       print_usage(argv[0]);
