@@ -106,6 +106,7 @@ static void activate(GtkApplication* app, gpointer gui_started)
    GdkPixbuf *pixbufout = getPixBuf(current_tid.msg, &current_tid.color);
 
    window = gtk_application_window_new(app);
+   //GdkPixbuf *pixbufout = gdk_pixbuf_get_from_window(window, 0, 0, 50, 50);
 
 #ifdef DEBUG
    // In debug mode display also window with larger pixbuf.
@@ -129,11 +130,27 @@ static void activate(GtkApplication* app, gpointer gui_started)
    g_signal_connect(
       tray_icon, "button-release-event", G_CALLBACK(on_click), NULL);
 
+   g_object_unref(pixbufout); // Is needed?
 
    // Notify that thread is activated.
    ((gui_start_callback_t) gui_started)();
 }
 
+
+static gboolean do_gui_quit(void)
+{
+   gtk_status_icon_set_visible(tray_icon, FALSE);
+   gtk_window_close(GTK_WINDOW(window));
+   gtk_widget_destroy(window);
+   g_object_unref(tray_icon);
+
+#ifdef DEBUG
+   // This is to better error report from valgrind.
+   //cairo_debug_reset_static_data();
+#endif
+
+   return TRUE;
+}
 
 
 // ******************************************************************
@@ -167,9 +184,6 @@ void gui_set(struct tray_icon_data *tid)
 
 void gui_quit(void)
 {
-   gtk_status_icon_set_visible(tray_icon, FALSE);
-   gtk_window_close(GTK_WINDOW(window));
-   gtk_widget_destroy(window);
-   g_object_unref(tray_icon);
+   gdk_threads_add_idle((GSourceFunc) do_gui_quit, NULL);
 }
 
