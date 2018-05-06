@@ -21,4 +21,6 @@ I also started a code for displaying the master volume, but I accidentally
 deleted it :) So it is not even here. (Which is a pity, it took me some time
 to create asynchronous code that would do that.)
 
+But I will keep it here. Maybe it will serve as an inspiration for the panel
+plugin one day.
 
