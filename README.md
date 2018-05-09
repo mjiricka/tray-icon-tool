@@ -2,7 +2,7 @@
 
 **ABANDONED PROJECT**
 
-I wanted to do a program that would display following two things in icon trace:
+I wanted to do a program that would display following two things as tray icons:
 
  - Short custom string that could be set when invoking the app. (And also be
    updated the same way.)
